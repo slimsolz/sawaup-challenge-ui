@@ -1,9 +1,12 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Flex } from "@chakra-ui/react";
-import React from "react";
 import CourseCarousel from "../components/Carousel/Carousel";
 import CourseCard from "../components/CourseCard/CourseCard";
 import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { getAllSkills } from "../slices/skillSlice";
+import { AppDispatch, RootState } from "../store";
 
 const data = [
   {
@@ -200,12 +203,22 @@ const data = [
   // },
 ];
 
-const dashboard = () => {
+const Dashboard = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { skills, isLoading, isSuccess, isError } = useSelector(
+    (state: RootState) => state.skill
+  );
+
+  useEffect(() => {
+    dispatch(getAllSkills());
+  }, []);
+
   return (
     <div>
       <Header />
       <Flex h="94vh">
-        <Sidebar />
+        <Sidebar loading={isLoading} skills={skills} />
         <Box w="80%" p={4} overflow={"scroll"}>
           <CourseCarousel title={"Courses based on your skills"}>
             {data.map(({ name, id, url, thumbnail, skills }) => (
@@ -237,4 +250,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

@@ -1,15 +1,29 @@
 import React from "react";
-import { Box, Flex, Heading, Tag, TagLabel, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Spinner,
+  Tag,
+  TagLabel,
+  Text,
+} from "@chakra-ui/react";
+import { operationType, SidebarTypes, skillType } from "../../../utils/types";
 
-type SidebarTypes = {
-  title: string;
-  noSkillText?: string;
-  skills?: Record<string, number | string>[];
-};
-
-const SideBarWidget = ({ title, noSkillText, skills }: SidebarTypes) => {
-  const handleClick = (id: number | string) => {
-    console.log(id);
+const SideBarWidget = ({
+  loading,
+  title,
+  noSkillText,
+  skills,
+  handleSelection,
+  removeSelection,
+  type,
+  fill,
+}: SidebarTypes) => {
+  const handleClick = (type: string, skill: skillType) => {
+    type === operationType.select
+      ? handleSelection(skill)
+      : removeSelection(skill);
   };
 
   return (
@@ -17,7 +31,17 @@ const SideBarWidget = ({ title, noSkillText, skills }: SidebarTypes) => {
       <Heading mt={5} mb={5} size={"lg"} as="h2" textAlign={"center"}>
         {title}
       </Heading>
-      {skills ? (
+      {loading ? (
+        <Flex justifyContent={"center"} alignItems={"center"}>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Flex>
+      ) : skills.length ? (
         <Flex
           p={3}
           flexWrap="wrap"
@@ -29,14 +53,14 @@ const SideBarWidget = ({ title, noSkillText, skills }: SidebarTypes) => {
               <Tag
                 size={"md"}
                 key={skill?.id}
-                variant="outline"
+                variant={fill ? "solid" : "outline"}
                 colorScheme="blue"
                 mb={2}
                 p={2}
                 rounded="md"
                 shadow="md"
                 cursor="pointer"
-                onClick={() => handleClick(skill?.id)}
+                onClick={() => handleClick(type, skill)}
               >
                 <TagLabel>{skill?.name}</TagLabel>
               </Tag>

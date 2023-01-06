@@ -22,6 +22,7 @@ const CourseCard = ({
   skills,
   likes,
 }: CourseDetails) => {
+  
   const handleClick = (id: number | string) => {
     console.log(id);
   };

@@ -1,49 +1,55 @@
 import { useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import SideBarWidget from "./SideBarWidget/SideBarWidget";
+import { operationType, SkillState, skillType } from "../../utils/types";
 
-const Sidebar = () => {
-  const [selectedSkills, setSelectedSkills] = useState();
-  const [availableSkills, setAvailableSkills] = useState([
-    { id: 1, name: "coding" },
-    { id: 2, name: "cloud" },
-    { id: 3, name: "html" },
-    { id: 4, name: "javascript" },
-    { id: 5, name: "typeScript" },
-    { id: 6, name: "coding" },
-    { id: 7, name: "cloud" },
-    { id: 8, name: "html" },
-    { id: 9, name: "javascript" },
-    { id: 10, name: "typeScript typeScript" },
-    { id: 11, name: "coding" },
-    { id: 12, name: "cloud" },
-    { id: 13, name: "html" },
-    { id: 14, name: "javascript" },
-    { id: 15, name: "typeScript" },
-    { id: 16, name: "coding" },
-    { id: 17, name: "cloud" },
-    { id: 18, name: "html" },
-    { id: 19, name: "javascript" },
-  ]);
+const Sidebar = ({ loading, skills }: SkillState) => {
+  const [selectedSkills, setSelectedSkills] = useState<skillType[]>([]);
 
-  const handleSelectedSkills = () => {};
+  const handleSelection = (skill: skillType) => {
+    let skillAlreadySelected = false;
+    if (selectedSkills.length) {
+      skillAlreadySelected = selectedSkills.some((e) => e.id === skill.id);
+    }
+
+    const selectedSkill = skills.find(
+      (selected) => skill.id === selected.id
+    ) as skillType;
+
+    if (!skillAlreadySelected) {
+      setSelectedSkills((prev) => [...prev, selectedSkill]);
+    }
+  };
+
+  const removeSelection = (skill: skillType) => {
+    const selectedSkill = selectedSkills.filter(
+      (selected) => skill.id !== selected.id
+    );
+
+    setSelectedSkills(selectedSkill);
+  };
 
   return (
-    <Flex
-      w="20%"
-      flexDir={"column"}
-      p={3}
-      boxShadow="lg"
-    >
+    <Flex w="20%" flexDir={"column"} p={3} boxShadow="lg">
       <SideBarWidget
-        skills={availableSkills}
+        loading={loading}
+        skills={selectedSkills}
         title="Selected skills"
         noSkillText="No skill selected"
+        handleSelection={handleSelection}
+        removeSelection={removeSelection}
+        type={operationType.remove}
+        fill={true}
       />
       <SideBarWidget
+        loading={loading}
         title="Available skills"
         noSkillText="No skill available"
-        skills={availableSkills}
+        skills={skills}
+        handleSelection={handleSelection}
+        removeSelection={removeSelection}
+        type={operationType.select}
+        fill={false}
       />
     </Flex>
   );
