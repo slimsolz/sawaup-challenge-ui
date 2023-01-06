@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Flex, Heading, Tag, TagLabel, Text } from "@chakra-ui/react";
 
 type SidebarTypes = {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import SideBarWidget from "./SideBarWidget/SideBarWidget";
 
 const Sidebar = () => {
@@ -29,7 +29,12 @@ const Sidebar = () => {
   const handleSelectedSkills = () => {};
 
   return (
-    <Flex w="20%" flexDir={"column"} p={3}>
+    <Flex
+      w="20%"
+      flexDir={"column"}
+      p={3}
+      boxShadow="lg"
+    >
       <SideBarWidget
         skills={availableSkills}
         title="Selected skills"
