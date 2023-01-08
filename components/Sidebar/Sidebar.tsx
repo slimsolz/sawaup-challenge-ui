@@ -3,7 +3,13 @@ import { Flex } from "@chakra-ui/react";
 import SideBarWidget from "./SideBarWidget/SideBarWidget";
 import { operationType, SkillState, skillType } from "../../utils/types";
 
-const Sidebar = ({ loading, skills }: SkillState) => {
+const Sidebar = ({
+  loading,
+  skills,
+  skillIds,
+  setSkillIds,
+  setSkillPageDetails,
+}: SkillState) => {
   const [selectedSkills, setSelectedSkills] = useState<skillType[]>([]);
 
   const handleSelection = (skill: skillType) => {
@@ -18,6 +24,8 @@ const Sidebar = ({ loading, skills }: SkillState) => {
 
     if (!skillAlreadySelected) {
       setSelectedSkills((prev) => [...prev, selectedSkill]);
+      setSkillIds((prev) => [...prev, skill.id]);
+      setSkillPageDetails({ page: 1, perPage: 3, totalCount: 1, totalPage: 1 });
     }
   };
 
@@ -25,8 +33,11 @@ const Sidebar = ({ loading, skills }: SkillState) => {
     const selectedSkill = selectedSkills.filter(
       (selected) => skill.id !== selected.id
     );
+    const selectedSkillIds = skillIds.filter((id) => skill.id !== id);
 
     setSelectedSkills(selectedSkill);
+    setSkillIds(selectedSkillIds);
+    setSkillPageDetails({ page: 1, perPage: 3, totalCount: 1, totalPage: 1 });
   };
 
   return (

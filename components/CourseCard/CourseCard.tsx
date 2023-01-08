@@ -22,11 +22,6 @@ const CourseCard = ({
   skills,
   likes,
 }: CourseDetails) => {
-  
-  const handleClick = (id: number | string) => {
-    console.log(id);
-  };
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -58,7 +53,6 @@ const CourseCard = ({
                 p={2}
                 rounded="md"
                 cursor="pointer"
-                onClick={() => handleClick(skill?.id)}
               >
                 <TagLabel>{skill?.name}</TagLabel>
               </Tag>
