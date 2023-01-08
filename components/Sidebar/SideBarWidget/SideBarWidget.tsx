@@ -8,7 +8,7 @@ import {
   TagLabel,
   Text,
 } from "@chakra-ui/react";
-import { operationType, SidebarTypes, skillType } from "../../../utils/types";
+import { OperationType, SidebarTypes, SkillType } from "../../../utils/types";
 
 const SideBarWidget = ({
   loading,
@@ -20,8 +20,8 @@ const SideBarWidget = ({
   type,
   fill,
 }: SidebarTypes) => {
-  const handleClick = (type: string, skill: skillType) => {
-    type === operationType.select
+  const handleClick = (type: string, skill: SkillType) => {
+    type === OperationType.select
       ? handleSelection(skill)
       : removeSelection(skill);
   };

@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ICourseState, PageDetailsType, ParamsType } from "./../utils/types";
+import {
+  ICourseState,
+  PageDetailsType,
+  ParamsType,
+  LikeCourseParams,
+} from "./../utils/types";
 import courseServices from "../services/course.services";
 
 const initialState: ICourseState = {
@@ -28,6 +33,10 @@ const initialState: ICourseState = {
       totalPage: 1,
     },
   },
+  isLikeLoading: false,
+  isLikeSuccess: false,
+  isLikeError: false,
+  liked: {},
 };
 
 export const getAllCourses = createAsyncThunk(
@@ -66,9 +75,12 @@ export const getAllCoursesBasedOnSkills = createAsyncThunk(
 
 export const toggleLikesCourses = createAsyncThunk(
   "/like-courses",
-  async (query: PageDetailsType, thunkAPI: any) => {
+  async (params: LikeCourseParams, thunkAPI: any) => {
     try {
-      return await courseServices.getAllCourses(query);
+      return await courseServices.toggleFavoriteCourses(
+        params.courseId,
+        params.name
+      );
     } catch (error: any) {
       let message =
         (error.response &&
@@ -117,6 +129,20 @@ export const courseSlice = createSlice({
         state.isSkillSuccess = false;
         state.isSkillError = true;
         state.skillsCourses.courses = [];
+      })
+      .addCase(toggleLikesCourses.pending, (state) => {
+        state.isLikeLoading = true;
+      })
+      .addCase(toggleLikesCourses.fulfilled, (state, action) => {
+        state.isLikeLoading = false;
+        state.isLikeSuccess = true;
+        state.liked = action.payload;
+      })
+      .addCase(toggleLikesCourses.rejected, (state, action) => {
+        state.isLikeLoading = false;
+        state.isLikeSuccess = false;
+        state.isLikeError = true;
+        state.liked = {};
       });
   },
 });

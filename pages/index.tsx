@@ -10,9 +10,11 @@ import {
   getAllCoursesBasedOnSkills,
 } from "../slices/courseSlice";
 import CoursesSection from "../components/CoursesSection/CoursesSection";
+import { createGuestUser } from "../utils/helpers";
 
 const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [guestUser, setGuestUser] = useState<string>("");
   const [skillIds, setSkillIds] = useState<number[]>([]);
   const [pageDetails, setPageDetails] = useState({
     page: 1,
@@ -42,12 +44,20 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getAllCourses(pageDetails));
+    let user = guestUser ? guestUser : createGuestUser();
+    setGuestUser(guestUser);
+    dispatch(getAllCourses({ ...pageDetails, user }));
   }, [dispatch, pageDetails.page, pageDetails.perPage]);
 
   useEffect(() => {
+    let user = guestUser ? guestUser : createGuestUser();
+    setGuestUser(guestUser);
     dispatch(
-      getAllCoursesBasedOnSkills({ ...skillPageDetails, ids: skillIds })
+      getAllCoursesBasedOnSkills({
+        ...skillPageDetails,
+        ids: skillIds,
+        user,
+      })
     );
   }, [skillIds, skillPageDetails.page, skillPageDetails.perPage]);
 

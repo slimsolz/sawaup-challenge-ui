@@ -1,18 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Icon, Tag, TagLabel, useDisclosure } from "@chakra-ui/react";
 import { Card, CardBody, CardFooter, Heading, Image } from "@chakra-ui/react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CourseVideoModal from "../CourseVideoModal/CourseVideoModal";
-import { urlStringConverter } from "../../utils/urlConverter";
-
-type CourseDetails = {
-  id: number;
-  name: string;
-  url: string;
-  thumbnail: string;
-  skills: { skill: { id: number; name: string } }[];
-  likes?: Record<string, any>;
-};
+import { urlStringConverter } from "../../utils/helpers";
+import { CourseDetailsProps } from "../../utils/types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { toggleLikesCourses } from "../../slices/courseSlice";
 
 const CourseCard = ({
   id,
@@ -20,9 +15,29 @@ const CourseCard = ({
   url,
   thumbnail,
   skills,
-  likes,
-}: CourseDetails) => {
+  users,
+}: CourseDetailsProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [userLike, setUserLike] = useState(users);
+  const [like, setLike] = useState(false);
+
+  const { liked, isLikeSuccess } = useSelector(
+    (state: RootState) => state.course
+  );
+
+  const toggleLike = () => {
+    let user = localStorage.getItem("user") || "";
+    dispatch(toggleLikesCourses({ courseId: id, name: user }));
+  };
+
+  useEffect(() => {
+    if (isLikeSuccess) {
+      const status = liked.courseId === id;
+      setLike(status);
+      setUserLike(status ? [liked] : []);
+    }
+  }, [liked]);
 
   return (
     <>
@@ -40,7 +55,11 @@ const CourseCard = ({
           <Heading size="md" onClick={onOpen}>
             {name}
           </Heading>
-          {likes ? <Icon as={FaHeart} color="red" /> : <Icon as={FaRegHeart} />}
+          {userLike?.length || like ? (
+            <Icon onClick={toggleLike} as={FaHeart} color="red" />
+          ) : (
+            <Icon onClick={toggleLike} as={FaRegHeart} />
+          )}
         </Flex>
         <Flex flexWrap="wrap" justifyContent="space-around" mb={2}>
           {skills.map(({ skill }) => {

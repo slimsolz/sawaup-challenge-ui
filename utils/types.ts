@@ -1,14 +1,14 @@
-export type skillType = {
+export type SkillType = {
   id: number;
   name: string;
 };
 
 export type SkillState = {
   loading: boolean;
-  skills: skillType[];
+  skills: SkillType[];
   skillIds: number[];
   setSkillIds: React.Dispatch<React.SetStateAction<number[]>>;
-  setSkillPageDetails: React.Dispatch<React.SetStateAction<PageDetailsType>>
+  setSkillPageDetails: React.Dispatch<React.SetStateAction<PageDetailsType>>;
 };
 
 export type SidebarTypes = {
@@ -17,12 +17,12 @@ export type SidebarTypes = {
   loading: boolean;
   title: string;
   noSkillText?: string;
-  skills: skillType[];
-  handleSelection(skill: skillType): void;
-  removeSelection(skill: skillType): void;
+  skills: SkillType[];
+  handleSelection(skill: SkillType): void;
+  removeSelection(skill: SkillType): void;
 };
 
-export enum operationType {
+export enum OperationType {
   select = "SELECT",
   remove = "REMOVE",
 }
@@ -32,15 +32,15 @@ export type IState = {
   isSuccess: boolean;
   isError: boolean;
   message: string;
-  skills: skillType[];
+  skills: SkillType[];
 };
 
-export type courseType = {
+export type CourseType = {
   id: number;
   name: string;
   url: string;
   thumbnail: string;
-  skills: [{ skill: skillType }];
+  skills: [{ skill: SkillType }];
   users?: [];
 };
 
@@ -49,6 +49,7 @@ export type PageDetailsType = {
   perPage: number;
   totalCount: number;
   totalPage: number;
+  user?: string;
 };
 
 export type ParamsType = {
@@ -69,19 +70,23 @@ export type ICourseState = {
   isSkillError: boolean;
   message: string;
   courses: {
-    courses: courseType[];
+    courses: CourseType[];
     pageDetails: PageDetailsType;
   };
   skillsCourses: {
-    courses: courseType[];
+    courses: CourseType[];
     pageDetails: PageDetailsType;
   };
+  isLikeLoading: boolean;
+  isLikeSuccess: boolean;
+  isLikeError: boolean;
+  liked: Record<string, any>;
 };
 
-export type courseProps = {
+export type CourseProps = {
   title: string;
   isLoading: boolean;
-  courses: courseType[];
+  courses: CourseType[];
   pageDetails: PageDetailsType;
   handleChange: (page: number) => void;
 };
@@ -91,4 +96,18 @@ export type CourseCarouselProps = {
   title: string;
   pageDetails: PageDetailsType;
   handlePageChange: (page: number) => void;
+};
+
+export type CourseDetailsProps = {
+  id: number;
+  name: string;
+  url: string;
+  thumbnail: string;
+  skills: { skill: { id: number; name: string } }[];
+  users?: Record<string, any>[];
+};
+
+export type LikeCourseParams = {
+  courseId: number;
+  name: string;
 };

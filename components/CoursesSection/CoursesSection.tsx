@@ -1,6 +1,6 @@
 import { Flex, Spinner, Text } from "@chakra-ui/react";
 import React from "react";
-import { courseProps } from "../../utils/types";
+import { CourseProps } from "../../utils/types";
 import CourseCarousel from "../Carousel/Carousel";
 import CourseCard from "../CourseCard/CourseCard";
 
@@ -9,10 +9,14 @@ const CoursesSection = ({
   isLoading,
   title,
   pageDetails,
-  handleChange
-}: courseProps) => {
+  handleChange,
+}: CourseProps) => {
   return (
-    <CourseCarousel title={title} pageDetails={pageDetails} handlePageChange={handleChange}>
+    <CourseCarousel
+      title={title}
+      pageDetails={pageDetails}
+      handlePageChange={handleChange}
+    >
       {isLoading ? (
         <Flex justifyContent={"center"} alignItems={"center"}>
           <Spinner
@@ -24,7 +28,7 @@ const CoursesSection = ({
           />
         </Flex>
       ) : courses.length ? (
-        courses.map(({ name, id, url, thumbnail, skills }) => (
+        courses.map(({ name, id, url, thumbnail, skills, users }) => (
           <CourseCard
             key={id}
             id={id}
@@ -32,6 +36,7 @@ const CoursesSection = ({
             url={url}
             thumbnail={thumbnail}
             skills={skills}
+            users={users}
           />
         ))
       ) : (

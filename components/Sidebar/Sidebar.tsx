@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import SideBarWidget from "./SideBarWidget/SideBarWidget";
-import { operationType, SkillState, skillType } from "../../utils/types";
+import { OperationType, SkillState, SkillType } from "../../utils/types";
 
 const Sidebar = ({
   loading,
@@ -10,9 +10,9 @@ const Sidebar = ({
   setSkillIds,
   setSkillPageDetails,
 }: SkillState) => {
-  const [selectedSkills, setSelectedSkills] = useState<skillType[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<SkillType[]>([]);
 
-  const handleSelection = (skill: skillType) => {
+  const handleSelection = (skill: SkillType) => {
     let skillAlreadySelected = false;
     if (selectedSkills.length) {
       skillAlreadySelected = selectedSkills.some((e) => e.id === skill.id);
@@ -20,7 +20,7 @@ const Sidebar = ({
 
     const selectedSkill = skills.find(
       (selected) => skill.id === selected.id
-    ) as skillType;
+    ) as SkillType;
 
     if (!skillAlreadySelected) {
       setSelectedSkills((prev) => [...prev, selectedSkill]);
@@ -29,7 +29,7 @@ const Sidebar = ({
     }
   };
 
-  const removeSelection = (skill: skillType) => {
+  const removeSelection = (skill: SkillType) => {
     const selectedSkill = selectedSkills.filter(
       (selected) => skill.id !== selected.id
     );
@@ -49,7 +49,7 @@ const Sidebar = ({
         noSkillText="No skill selected"
         handleSelection={handleSelection}
         removeSelection={removeSelection}
-        type={operationType.remove}
+        type={OperationType.remove}
         fill={true}
       />
       <SideBarWidget
@@ -59,7 +59,7 @@ const Sidebar = ({
         skills={skills}
         handleSelection={handleSelection}
         removeSelection={removeSelection}
-        type={operationType.select}
+        type={OperationType.select}
         fill={false}
       />
     </Flex>

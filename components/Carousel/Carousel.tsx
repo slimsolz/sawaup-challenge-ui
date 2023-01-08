@@ -9,10 +9,13 @@ const CourseCarousel = ({
   pageDetails,
   handlePageChange,
 }: CourseCarouselProps) => {
+
   const handlePagination = (type: string, nextPageNumber: number): void => {
     if (
       (type === "prev" && pageDetails.page > 1) ||
-      (type === "next" && pageDetails.page !== pageDetails.totalPage)
+      (type === "next" &&
+        pageDetails.page !== pageDetails.totalPage &&
+        pageDetails.totalPage !== 0)
     ) {
       handlePageChange(nextPageNumber);
     }
